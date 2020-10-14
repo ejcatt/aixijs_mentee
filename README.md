@@ -6,10 +6,12 @@ Then bring up the console (option + command + J in chrome) and use the command `
 
 To plot the results, move the downloaded results to the folder experiments/new-experiments and run the python file experiments/analysis.py. The plots of the results will be in the experiments/new-experiments folder.
 
+
+This is an extention based on AIXIjs. The original AIXIjs code can be found at 
+https://github.com/aslanides/aixijs
+
 # AIXIjs
 AIXIjs is a JavaScript demo for running General Reinforcement Learning (RL) agents in the browser. In particular, it provides a general and extensible framework for running experiments on Bayesian RL agents in general (partially observable, non-Markov, non-ergodic) environments.
-
-**UPDATE** (May 2017): I'll be presenting a conference paper containing a literature survey along with some experiments based on AIXIjs at IJCAI 2017, in Melbourne, Australia. The paper (to appear) is: J. S. Aslanides, Jan Leike, and Marcus Hutter. "Universal Reinforcement Learning Algorithms: Survey & Experiments", in Proceedings of the 26th Intl. Joint Conf. on A.I..
 
 ![](assets/aixi.gif) ![](assets/ksa.gif)
 
@@ -61,7 +63,7 @@ for (let t = 0; t < options.steps; t+s+) {
 
 Note that agents should implement two methods, `selectAction(e)` and `update(a,e)`. Environments should implement `generatePercept()`, `perform(a)`, and `conditionalDistribution(e)`.
 
-## How to run experiments
+## How to run experiments of AIXIjs
 
 I've provided a helper function `demo.experiment(...configs,runs)` to make it easy to do numerous runs with different configs, and serialize the results to JSON. To run experiments, bring up the console in Chrome (Ctrl+Shift+I on Linux), and run something like:
 
@@ -74,7 +76,7 @@ For the experiments run in the paper "Strong Asymptotic Optimality in General En
 ## License
 GPL.
 
-## How to cite
+## How to cite AIXIjs
 
 If you use this software in your own experiments, please cite it as:
 
@@ -88,7 +90,3 @@ If you use this software in your own experiments, please cite it as:
  publisher = {AAAI Press},
 }
 ```
-
-## Contributing
-
-If you'd like to contribute, I'm all ears! There's a lot of stuff to do :) Go ahead and open a pull request!

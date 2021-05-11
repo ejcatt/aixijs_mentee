@@ -112,7 +112,7 @@
 				<li role="presentation"><a href="index.html">About</a></li>
 				<li role="presentation" class="active"><a href="demo.html">Demos</a></li>
 			</ul>
-			<p>For the experiments run in the paper "Curiosity Killed the Cat and the Asymptotically Optimal Agent", bring up the console (option + command + J in chrome) and use the command `demo.experiment([configs.mentee, configs.mentor, configs.inq, configs.bayesexp, configs.thompson],{runs: 20,env:{N:10},agent:{horizon:6,steps:8000},seed:'aixijs'})`. The results can then be downloaded at bottom of the DOM and should be named `results-1`. </p>
+			<p>For the experiments run in the paper "Curiosity Killed the Cat and the Asymptotically Optimal Agent", bring up the console (option + command + J in chrome) and use the commands `demo.experiment([configs.mentee, configs.mentor],{runs: 20,env:{N:10},agent:{horizon:6,steps:8000},seed:'aixijs'})` and `demo.experiment([configs.mentee, configs.mentor, configs.inq, configs.bayesexp, configs.thompson],{runs: 20,env:{N:10},agent:{horizon:6,steps:8000},seed:'aixijs'})`. The results can then be downloaded at bottom of the DOM and should be name `results-1` and `results-2`. </p>
 
 			<p>To plot the results, move the downloaded results to the folder experiments/new-experiments and run the python file experiments/analysis.py. The plots of the results will be in the experiments/new-experiments folder.</p>
 		</div>

@@ -10,7 +10,7 @@ class Gridworld extends Environment {
 		this.rewards = options.rewards || Gridworld.rewards;
 
 		this.plots = [ExplorationPlot];
-		this.obsBits = 4;
+		this.obsBits = 1;
 		this.grid = [];
 		this.N = options.N;
 		Util.assert(this.N);
@@ -22,6 +22,7 @@ class Gridworld extends Environment {
 		this.visits = 0;
 		this.state_percepts = options.state_percepts;
 		this.initialQ = options.initialQ || 100;
+		this.trapped = false;
 
 
 		this.min_reward = Math.min(this.rewards.wall,this.rewards.trap) + this.rewards.move;
@@ -52,9 +53,9 @@ class Gridworld extends Environment {
 		} else {
 			this.pos = this.grid[0][0];
 		}
-		
-		
-		this.traps = [ (!this.pos.connexions[0]) ? 0 : this.pos.connexions[0].constructor, (!this.pos.connexions[1]) ? 0 : this.pos.connexions[1].constructor,  (!this.pos.connexions[2]) ? 0 : this.pos.connexions[2].constructor ,  (!this.pos.connexions[3]) ? 0 : this.pos.connexions[3].constructor]; 
+
+
+		this.traps = [ (!this.pos.connexions[0]) ? 0 : this.pos.connexions[0].constructor, (!this.pos.connexions[1]) ? 0 : this.pos.connexions[1].constructor,  (!this.pos.connexions[2]) ? 0 : this.pos.connexions[2].constructor ,  (!this.pos.connexions[3]) ? 0 : this.pos.connexions[3].constructor];
 		this.grid_locations = new Array();
 
 	}
@@ -86,7 +87,7 @@ class Gridworld extends Environment {
 				if (this.state_percepts ) {
 					tile.obs = idx * this.N + jdx;
 				} else {
-					tile.obs = parseInt(str, 2);
+					tile.obs = parseInt('F', 2);
 				}
 
 			});
@@ -238,13 +239,14 @@ class Gridworld extends Environment {
 		} else {
 			if (this.pos.constructor == Trap) {
 				rew += this.rewards.trap;
+				this.trapped = true;
 			} else {
 				rew += this.rewards.wall;
 				this.wall_hit = true;
 			}
 		}
-		
-		this.traps = [ (!this.pos.connexions[0]) ? 0 : this.pos.connexions[0].constructor, (!this.pos.connexions[1]) ? 0 : this.pos.connexions[1].constructor,  (!this.pos.connexions[2]) ? 0 : this.pos.connexions[2].constructor ,  (!this.pos.connexions[3]) ? 0 : this.pos.connexions[3].constructor]; 
+
+		this.traps = [ (!this.pos.connexions[0]) ? 0 : this.pos.connexions[0].constructor, (!this.pos.connexions[1]) ? 0 : this.pos.connexions[1].constructor,  (!this.pos.connexions[2]) ? 0 : this.pos.connexions[2].constructor ,  (!this.pos.connexions[3]) ? 0 : this.pos.connexions[3].constructor];
 		this.grid_locations = t;
 
 		rew += this.dynamics(this.pos);
@@ -257,8 +259,10 @@ class Gridworld extends Environment {
 	}
 
 	generatePercept() {
+		// console.log("this.pos");
+		// console.log(this.pos);
 		return {
-			obs: this.pos.obs,
+			obs: this.pos, //.obs,
 			rew: this.reward,
 			traps: this.traps
 		};
@@ -331,8 +335,8 @@ class Gridworld extends Environment {
 		} else {
 			let C = options.N * options.N;
 			modelWeights = Util.zeros(C);
-			
-			
+
+
 			for (let i = 0; i < options.N; i++) {
 				for (let j = 0; j < options.N; j++) {
 					if (parametrization == 'goal') {
@@ -410,7 +414,7 @@ Gridworld.rewards = {
 	wall: 0,
 	empty: 0,
 	move: 0,
-	trap: -100,
+	trap: -30,
 };
 
 Gridworld.params = [

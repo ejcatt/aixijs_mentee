@@ -142,9 +142,9 @@ class Dirichlet {
 		return means;
 	}
 
-	update(cls) { // for performance, only one obs at a time now
-		this.alphas[cls]++;
-		this.alphaSum++;
+	update(cls,n) { // for performance, only one obs at a time now
+		this.alphas[cls]+= n;
+		this.alphaSum+= n;
 	}
 
 	zero(cls) {

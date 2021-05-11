@@ -249,4 +249,50 @@ class Util {
 
   		return result;
 	}
+
+	static gammafn(n) {
+	let answer = 1;
+  	if (n == 0 || n == 1){
+    	return answer;
+  	}else{
+    	for(var i = n; i >= 1; i--){
+      	answer = answer * i;
+    	}
+    	return answer;
+ 	 }  
+	}
+
+	static betafn(alphas) {
+		var top = 1;
+		for(let i=0; i<alphas.length;i++) {
+			top *= Util.gammafn(alphas[i]);
+		}
+		var alphasum = 0;
+		for(let i=0; i<alphas.length;i++) {
+			alphasum += alphas[i];
+		}
+		return top/Util.gammafn(alphasum);
+	}
+
+	static digamma(n){
+		var eul = -0.577215664901532860606512090082402431042159335939923598805767234;
+		for (let i=1; i<n-1;i++) {
+			eul += 1/i;
+		}
+		return eul;
+	}
+
+	static diri_entropy(counts) {
+		var csum = 0;
+		for(let i=0; i<counts.length;i++) {
+			csum += counts[i];
+		}
+
+		var csum2 = 0;
+		for(let i=0; i<counts.length;i++) {
+			csum2 += (counts[i]-1)*Util.digamma(counts[i]);
+		}
+		return Math.log(Util.betafn(counts)) + ((csum - counts.length)*Util.digamma(csum)) - csum2;
+	}
+
 }

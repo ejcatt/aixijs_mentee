@@ -66,8 +66,8 @@ class DirichletGrid {
 		}
 
 		this.perform(4);
-		this.pos.update(0);
-		this.pos.update(1);
+		this.pos.update(0,1);
+		// this.pos.update(1);
 		// Added the trapped notion
 		this.trapped = false;
 	}
@@ -126,7 +126,7 @@ class DirichletGrid {
 		if (this.trapped) {
 			let o = parseInt(str, 2);
 			let r = Gridworld.rewards.trap + Gridworld.rewards.move;
-			this.e = { obs: o, rew: r };
+			this.e = { obs: this.pos, rew: r };
 		} else {
 			let wallHit = false;
 
@@ -170,7 +170,7 @@ class DirichletGrid {
 
 			r += Gridworld.rewards.move;
 
-			this.e = { obs: o, rew: r };
+			this.e = { obs: this.pos, rew: r };
 		}
 	}
 
@@ -190,15 +190,15 @@ class DirichletGrid {
 			}
 
 			if (oBits[i]) {
-				n.update(2); // wall
+				n.update(2,1); // wall
 			} else {
 				if (n.pr.alphas[0] == 0 && n.pr.alphas[1] == 0) {
-					n.update(0);
-					n.update(1);
+					n.update(0,1);
+					n.update(1,1);
 				}
 				// update trap probs
 				if (n.pr.alphas[3] == 0) {
-					n.update(3);
+					n.update(3,1);
 				}
 			}
 
@@ -214,11 +214,11 @@ class DirichletGrid {
 		var rew = r - Gridworld.rewards.move;
 
 		if (rew == Gridworld.rewards.empty) {
-			s.update(0);
+			s.update(0,1);
 		} else if (rew == Gridworld.rewards.chocolate) {
-			s.update(1);
+			s.update(1,1);
 		} else if (rew == Gridworld.rewards.trap) {
-			s.update(3);
+			s.update(3,1);
 		}
 
 		this.params[s.x][s.y] = s.pr.alphas;
@@ -356,8 +356,8 @@ class DirichletTile {
 		return this.children[idx];
 	}
 
-	update(cls) {
-		this.pr.update(cls);
+	update(cls,n) {
+		this.pr.update(cls,n);
 	}
 
 	prob(i) {

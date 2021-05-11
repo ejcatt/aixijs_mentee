@@ -10,13 +10,15 @@ class Mentee extends BayesAgent {
 		this.trace = MenteeTrace;
     this.mentor = new Mentor(options);
         this.eta = options.eta;
-        this.max_m = options.max_m
+        this.max_m = options.max_m;
+        this.kssamples = options.kssamples;
         this.saved_dist = new Array(200);
         for (var i = 0; i < this.saved_dist.length; i++) {
             this.saved_dist[i] = new Array(this.model.C);
         }
         this.alpha = new Array(this.max_m);
         this.alpha_prob = new Array(this.max_m);
+        this.asum = 0;
         for (var i = 1; i < this.alpha.length; i++) {
           this.alpha[i] = new Array(i-1);
           this.alpha_prob[i] = new Array(i-1);
@@ -25,8 +27,11 @@ class Mentee extends BayesAgent {
             this.alpha[i][j].model = this.bayesAgent.model;
             this.alpha[i][j].model.horizon = i;
             this.alpha_prob[i][j] = 1/(i*i*(i+1));
+            this.asum += this.alpha_prob[i][j];
           }
         }
+        // console.log("alpha");
+        // console.log(this.alpha[2][0].policy_weights2);
         this.exp_num = [0,0];
         this.alpha_sum = 0;
         this.xi_inv = new Array(200);
@@ -58,21 +63,33 @@ class Mentee extends BayesAgent {
                            }
                         this.alpha[i][j].model.weights[l] /= this.saved_dist[this.t - j][l];
                        }
-                    
+
                   }
-               this.alpha_prob[i][j] = (1/(i*i*(i+1))) * Math.min(1,this.eta * this.alpha[i][j].planner.getValueEstimate() );
+                // console.log("adding_to_alpga_prob");
+               this.alpha_prob[i][j] = (1/(i*i*(i+1))) * Math.min(1,this.eta / i * this.alpha[i][j].value_estimate(e) );
+               // console.log("Value estimate");
+               // console.log(this.alpha[i][j].value_estimate(e));
+               //console.log(this.alpha[i][j].planner.getValueEstimate());
                this.alpha_sum += this.alpha_prob[i][j];
-               if (this.alpha_sum > rand && !this.explore) {
-                   this.explore = true;
-                  }
+
              }
         }
-        
+        this.alpha_sum = this.alpha_sum / this.asum;
+
+        if (this.alpha_sum > rand && !this.explore) {
+            this.explore = true;
+          }
+
         if (this.alpha_sum > 1) {
             console.log('Alpha_sum error');
             this.explore = false;
-        } 
-        
+        }
+        // console.log("Alpha_sum");
+        // console.log(this.alpha_sum);
+        if (e.rew == -100) {
+        console.log("Trapped");
+        }
+
 		if (this.explore) {
       console.log('Exploring');
       var mentor_action = this.mentor.selectAction(e);
@@ -98,4 +115,5 @@ class Mentee extends BayesAgent {
 Mentee.params = [
     { field : 'eta', value: 1 },
     { field : 'max_m', value: 6 },
+    { field : 'kssamples', value: 5},
 ];

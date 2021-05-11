@@ -50,7 +50,6 @@ class ExpectimaxTree {
 
 	bestAction() {
 		this.getValueEstimate();
-
 		return Util.argmax(this.root, (n, a) => {
 			let child = n.getChild(a);
 			return child ? child.mean : this.min_reward; // changed from 0 to min reward
@@ -169,7 +168,7 @@ class DecisionNode {
 		if (dfr > tree.horizon) {
 			return 0;
 		} else if (this.visits == 0) {
-			reward = tree.rollout(tree.horizon, dfr);
+			reward = 0; //tree.rollout(tree.horizon, dfr);
 		} else {
 			let action = this.selectAction(tree, dfr);
 			reward = this.getChild(action).sample(tree, dfr);

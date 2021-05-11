@@ -128,10 +128,14 @@ const demo = {
 
 		let step = _ => {
 			trace.log(agent, env, a, e);
-			a = agent.selectAction(e);
+			if (!env.trapped){
+				a = agent.selectAction(e);
+			}
 			env.perform(a);
 			e = env.generatePercept();
-			agent.update(a, e);
+			if (!env.trapped){
+				agent.update(a, e);
+			}
 		};
 
 		if (this.nolivevis || this.novis) {
@@ -222,6 +226,7 @@ const demo = {
 				console.log(`    run ${i + 1} of ${runs}...`);
 				if (i > 0) {
 					env = new env.constructor(env.options);
+					env.trapped = false;
 					if (env.constructor == Gridworld) {
 						env.isSolvable();
 					}
